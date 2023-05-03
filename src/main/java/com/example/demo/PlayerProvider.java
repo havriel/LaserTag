@@ -3,13 +3,14 @@ package com.example.demo;
 import java.util.ArrayList;
 
 public class PlayerProvider {
-    public ArrayList<Player> players = new ArrayList<>();
+    private ArrayList<Player> players;
 
     public PlayerProvider() {
+        players = new ArrayList<>();
     }
 
     public void addPlayer(Player player){
-        players.add(player);
+        this.players.add(player);
     }
 
     public ArrayList<Player> getList(){

@@ -3,7 +3,6 @@ package com.example.demo;
 import java.io.IOException;
 
 import com.example.demo.Constants.Constants;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -11,18 +10,11 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.WindowEvent;
 
 public class SecondController {
     DataBaseHandler db = new DataBaseHandler();
 
     PlayerProvider playerProvider = new PlayerProvider();
-
-    private final EventHandler<WindowEvent> closeEvent= windowEvent -> db.clearBase();
-
-    public EventHandler<WindowEvent> getCloseEvent(){
-        return closeEvent;
-    }
     @FXML
     private Button addBtn;
 

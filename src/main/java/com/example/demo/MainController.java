@@ -1,13 +1,9 @@
 package com.example.demo;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
 
 import com.example.demo.Constants.Constants;
 import com.fazecast.jSerialComm.SerialPort;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -17,20 +13,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 public class MainController {
     public static Alert nullAlert = new Alert(Alert.AlertType.NONE);
     public static SerialPort sp;
-
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
-
     @FXML
     private Button nextBtn;
 
@@ -49,7 +36,7 @@ public class MainController {
                 nullAlert.setContentText("Вы не указали COM порт!");
                 nullAlert.show();
             }else {
-                if(connection(comText.getText(), Constants.RATE)){
+                if(connection(comText.getText())){
                     Parent root;
                     try {
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("SecondPage.fxml"));
@@ -57,8 +44,6 @@ public class MainController {
                         Stage stage = new Stage();
                         stage.setTitle(Constants.LABEL);
                         stage.setScene(new Scene(root));
-                        SecondController controller = loader.getController();
-                        stage.setOnCloseRequest(controller.getCloseEvent());
                         stage.show();
                         // Hide this current window (if this is what you want)
                         ((Node)(event.getSource())).getScene().getWindow().hide();
@@ -76,10 +61,10 @@ public class MainController {
         });
     }
 
-    private static boolean connection(String com, int rate){
+    private static boolean connection(String com){
         sp = SerialPort.getCommPort(com);
         sp = SerialPort.getCommPort(com);
-        sp.setComPortParameters(rate,8,1,0);
+        sp.setComPortParameters(Constants.RATE,8,1,0);
         sp.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING,0,0);
         return sp.openPort();
     }
