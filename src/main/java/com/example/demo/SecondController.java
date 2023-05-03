@@ -1,7 +1,6 @@
 package com.example.demo;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import com.example.demo.Constants.Constants;
 import javafx.event.EventHandler;
@@ -15,15 +14,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.WindowEvent;
 
 public class SecondController {
-    private final ArrayList<Player> playerArrayList = new ArrayList<>();
     DataBaseHandler db = new DataBaseHandler();
 
-    private EventHandler<WindowEvent> closeEvent= new EventHandler<WindowEvent>() {
-        @Override
-        public void handle(WindowEvent windowEvent) {
-            db.clearBase();
-        }
-    };
+    PlayerProvider playerProvider = new PlayerProvider();
+
+    private final EventHandler<WindowEvent> closeEvent= windowEvent -> db.clearBase();
 
     public EventHandler<WindowEvent> getCloseEvent(){
         return closeEvent;
@@ -61,9 +56,9 @@ public class SecondController {
             Player player = new Player();
             newPlayer(player);
             db.addPlayer(player);
-            playerArrayList.clear();
-            playerArrayList.add(player);
-            for(Player players:playerArrayList) {
+            playerProvider.clearList();
+            playerProvider.addPlayer(player);
+            for(Player players:playerProvider.getList()) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getResource("player_item.fxml"));
                 try {
