@@ -10,7 +10,7 @@ public class PlayerProvider {
     }
 
     public void addPlayer(Player player){
-        this.players.add(player);
+        players.add(player);
     }
 
     public ArrayList<Player> getList(){
