@@ -1,7 +1,5 @@
 package com.example.demo;
 
-import java.io.IOException;
-
 import com.example.demo.Constants.Constants;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +12,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class SecondController {
     DataBaseHandler db = new DataBaseHandler();
@@ -54,7 +54,7 @@ public class SecondController {
             db.addPlayer(player);
             playerProvider.clearList();
             playerProvider.addPlayer(player);
-            for(Player players:playerProvider.getList()) {
+            for (Player players : playerProvider.getList()) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getResource("player_item.fxml"));
                 try {
@@ -86,14 +86,14 @@ public class SecondController {
                 stage.setScene(new Scene(root));
                 stage.show();
                 // Hide this current window (if this is what you want)
-                ((Node)(event.getSource())).getScene().getWindow().hide();
-            }
-            catch (IOException e) {
+                ((Node) (event.getSource())).getScene().getWindow().hide();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         });
 
     }
+
     public void newPlayer(Player player) {
         player.setName(second_name.getText());
         player.setCommand(second_command.getValue());

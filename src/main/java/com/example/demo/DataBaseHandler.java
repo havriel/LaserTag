@@ -1,12 +1,9 @@
 package com.example.demo;
 
-import com.example.demo.Constants.Constants;
-
 import java.sql.*;
 
 public class DataBaseHandler extends Configs {
-    Connection dbConnection;
-    PreparedStatement prSt;
+    private Connection dbConnection;
 
     public Connection getDbConnection() throws SQLException, ClassNotFoundException{
         String connectionString = "jdbc:mysql://localhost/lasertag";
@@ -24,14 +21,12 @@ public class DataBaseHandler extends Configs {
     public void addPlayer(Player player){
         try {
             dbConnection = getDbConnection();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
         String insert = "INSERT INTO players (name,command,weapon,vest,kills,deaths,place) VALUES(?,?,?,?,?,?,?)";
         try {
-            prSt = dbConnection.prepareStatement(insert);
+            PreparedStatement prSt = dbConnection.prepareStatement(insert);
             prSt.setString(1, player.getName());
             prSt.setString(2,player.getCommand());
             prSt.setInt(3,player.getWeaponNum());
