@@ -11,6 +11,9 @@ import jssc.SerialPort;
 import jssc.SerialPortException;
 
 import java.net.URL;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class TimerController implements Initializable {
@@ -18,6 +21,7 @@ public class TimerController implements Initializable {
     private int seconds = 10;
     private int minutes = 1;
     private boolean isStopped = false;
+    private DataBaseHandler handler;
 
     @FXML
     private Label minute;
@@ -30,6 +34,14 @@ public class TimerController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        handler = new DataBaseHandler();
+        try {
+            handler.dbConnection = handler.getDbConnection();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+
         FileInput input = new FileInput();
         SerialPort serialPort = new SerialPort(input.readFile());
         try {
@@ -70,7 +82,23 @@ public class TimerController implements Initializable {
                     try {
                         String s = serialPort.readString();
                         System.out.println(s);
+                        String getVest = "SELECT vest FROM players WHERE vest ="+Integer.parseInt(s.substring(0,1));
+                        PreparedStatement statement = null;
+                        ResultSet rs = null;
+                        try {
+                            statement = handler.dbConnection.prepareStatement(getVest);
+                            rs = statement.executeQuery();
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        }
+                        if (rs.next()){
+                            if (rs.getInt("vest")==Integer.parseInt(s.substring(0,1))){
+                                System.out.println("Yes");
+                            }
+                        }
                     } catch (SerialPortException e) {
+                        throw new RuntimeException(e);
+                    } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
 

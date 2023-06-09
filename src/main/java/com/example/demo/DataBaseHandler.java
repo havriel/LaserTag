@@ -3,22 +3,22 @@ package com.example.demo;
 import java.sql.*;
 
 public class DataBaseHandler extends Configs {
-    private Connection dbConnection;
+    public Connection dbConnection;
 
-    public Connection getDbConnection() throws SQLException, ClassNotFoundException{
+    public Connection getDbConnection() throws SQLException, ClassNotFoundException {
         String connectionString = "jdbc:mysql://localhost/lasertag";
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            dbConnection = DriverManager.getConnection(connectionString,dbUser,dbPass);
+            dbConnection = DriverManager.getConnection(connectionString, dbUser, dbPass);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         } catch (SQLException e) {
             throw new RuntimeException("unhandled", e);
         }
-        return  dbConnection;
+        return dbConnection;
     }
 
-    public void addPlayer(Player player){
+    public void addPlayer(Player player) {
         try {
             dbConnection = getDbConnection();
         } catch (SQLException | ClassNotFoundException e) {
@@ -28,19 +28,19 @@ public class DataBaseHandler extends Configs {
         try {
             PreparedStatement prSt = dbConnection.prepareStatement(insert);
             prSt.setString(1, player.getName());
-            prSt.setString(2,player.getCommand());
-            prSt.setInt(3,player.getWeaponNum());
-            prSt.setInt(4,player.getVestNum());
-            prSt.setInt(5,player.getKills());
-            prSt.setInt(6,player.getDeaths());
-            prSt.setInt(7,player.getPlace());
+            prSt.setString(2, player.getCommand());
+            prSt.setInt(3, player.getWeaponNum());
+            prSt.setInt(4, player.getVestNum());
+            prSt.setInt(5, player.getKills());
+            prSt.setInt(6, player.getDeaths());
+            prSt.setInt(7, player.getPlace());
             prSt.executeUpdate();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException("unhandled1", e);
         }
     }
 
-    public void clearBase(){
+    public void clearBase() {
         try {
             dbConnection = getDbConnection();
         } catch (SQLException | ClassNotFoundException e) {
