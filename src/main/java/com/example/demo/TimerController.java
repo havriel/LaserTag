@@ -50,7 +50,6 @@ public class TimerController implements Initializable {
         } catch (SerialPortException e) {
             throw new RuntimeException(e);
         }
-        DataBaseHandler dataBaseHandler = new DataBaseHandler();
         if (minutes < 10) {
             minute.setText("0" + minutes);
         } else {
@@ -80,25 +79,47 @@ public class TimerController implements Initializable {
 
                 if (!isStopped) {
                     try {
-                        String s = serialPort.readString();
+                        String s = serialPort.readString().trim();
                         System.out.println(s);
-                        String getVest = "SELECT vest FROM players WHERE vest ="+Integer.parseInt(s.substring(0,1));
-                        PreparedStatement statement = null;
-                        ResultSet rs = null;
+                        String getVest;
+                        String getWeapon;
+
+                        int w = Integer.parseInt(s.substring(s.lastIndexOf('/')+1));
+
+                        if(s.startsWith("10")){
+                            getVest = "SELECT vest FROM players WHERE vest ="+10;
+                        }else{
+                            getVest = "SELECT vest FROM players WHERE vest ="+Integer.parseInt(s.substring(0,1));
+                        }
+
+                        if(s.endsWith("10")){
+                            getWeapon = "SELECT weapon FROM players WHERE weapon ="+10;
+                        }else{
+                            getWeapon = "SELECT weapon FROM players WHERE weapon ="+w;
+                        }
+                        PreparedStatement statementVest;
+                        PreparedStatement statementWeapon;
+                        ResultSet rsVest;
+                        ResultSet rsWeapon;
                         try {
-                            statement = handler.dbConnection.prepareStatement(getVest);
-                            rs = statement.executeQuery();
+                            statementVest = handler.dbConnection.prepareStatement(getVest);
+                            statementWeapon = handler.dbConnection.prepareStatement(getWeapon);
+                            rsVest = statementVest.executeQuery();
+                            rsWeapon = statementWeapon.executeQuery();
                         } catch (SQLException e) {
                             throw new RuntimeException(e);
                         }
-                        if (rs.next()){
-                            if (rs.getInt("vest")==Integer.parseInt(s.substring(0,1))){
-                                System.out.println("Yes");
+                        if (rsVest.next()){
+                            if (rsVest.getInt("vest")==Integer.parseInt(s.substring(0,1))){
+                                handler.updateDeaths(Integer.parseInt(s.substring(0,1)));
                             }
                         }
-                    } catch (SerialPortException e) {
-                        throw new RuntimeException(e);
-                    } catch (SQLException e) {
+                        if(rsWeapon.next()){
+                            if (rsWeapon.getInt("weapon")== w){
+                                handler.updateKills(w);
+                            }
+                        }
+                    } catch (SerialPortException | SQLException e) {
                         throw new RuntimeException(e);
                     }
 

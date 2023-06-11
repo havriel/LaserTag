@@ -55,4 +55,34 @@ public class DataBaseHandler extends Configs {
             throw new RuntimeException(e);
         }
     }
+
+    public void updateDeaths(int vest){
+        try {
+            dbConnection = getDbConnection();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        String uDeath = "UPDATE players SET deaths=deaths+1 WHERE vest="+vest;
+        try {
+            Statement statement = dbConnection.createStatement();
+            statement.execute(uDeath);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateKills(int weapon){
+        try {
+            dbConnection = getDbConnection();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        String uKills = "UPDATE players SET kills=kills+1 WHERE weapon="+weapon;
+        try {
+            Statement statement = dbConnection.createStatement();
+            statement.execute(uKills);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
