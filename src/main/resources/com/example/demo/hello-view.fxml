@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -12,7 +11,6 @@
       <AnchorPane layoutX="-3.0" layoutY="-6.0" prefHeight="164.0" prefWidth="708.0" style="-fx-background-color: #2E3348; -fx-background-image: url('307.jpg'); " AnchorPane.leftAnchor="-3.0" AnchorPane.rightAnchor="-5.0" />
       <Button fx:id="nextBtn" layoutX="247.0" layoutY="422.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="207.0" style="-fx-border-color: #000000;" text="ДАЛЕЕ" AnchorPane.leftAnchor="247.0" AnchorPane.rightAnchor="246.0" />
       <Label layoutX="203.0" layoutY="239.0" prefHeight="28.0" prefWidth="115.0" text="Пример: COM5" AnchorPane.leftAnchor="203.0" AnchorPane.rightAnchor="382.0" />
-      <CheckBox fx:id="comCheck" layoutX="203.0" layoutY="318.0" mnemonicParsing="false" text="Запомнить COM порт" AnchorPane.leftAnchor="203.0" AnchorPane.rightAnchor="319.0" />
       <TextField fx:id="comText" layoutX="201.0" layoutY="270.0" prefHeight="40.0" prefWidth="300.0" promptText="Введите COM порт" AnchorPane.leftAnchor="201.0" AnchorPane.rightAnchor="199.0">
          <font>
             <Font size="18.0" />
