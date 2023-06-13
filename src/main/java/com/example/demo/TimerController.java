@@ -1,15 +1,22 @@
 package com.example.demo;
 
+import com.example.demo.Constants.Constants;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import jssc.SerialPort;
 import jssc.SerialPortException;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -46,7 +53,7 @@ public class TimerController implements Initializable {
         SerialPort serialPort = new SerialPort(input.readFile());
         try {
             serialPort.openPort();
-            serialPort.setParams(SerialPort.BAUDRATE_9600,SerialPort.DATABITS_8,SerialPort.STOPBITS_1,SerialPort.PARITY_NONE);
+            serialPort.setParams(SerialPort.BAUDRATE_9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
         } catch (SerialPortException e) {
             throw new RuntimeException(e);
         }
@@ -84,18 +91,18 @@ public class TimerController implements Initializable {
                         String getVest;
                         String getWeapon;
 
-                        int w = Integer.parseInt(s.substring(s.lastIndexOf('/')+1));
+                        int w = Integer.parseInt(s.substring(s.lastIndexOf('/') + 1));
 
-                        if(s.startsWith("10")){
-                            getVest = "SELECT vest FROM players WHERE vest ="+10;
-                        }else{
-                            getVest = "SELECT vest FROM players WHERE vest ="+Integer.parseInt(s.substring(0,1));
+                        if (s.startsWith("10")) {
+                            getVest = "SELECT vest FROM players WHERE vest =" + 10;
+                        } else {
+                            getVest = "SELECT vest FROM players WHERE vest =" + Integer.parseInt(s.substring(0, 1));
                         }
 
-                        if(s.endsWith("10")){
-                            getWeapon = "SELECT weapon FROM players WHERE weapon ="+10;
-                        }else{
-                            getWeapon = "SELECT weapon FROM players WHERE weapon ="+w;
+                        if (s.endsWith("10")) {
+                            getWeapon = "SELECT weapon FROM players WHERE weapon =" + 10;
+                        } else {
+                            getWeapon = "SELECT weapon FROM players WHERE weapon =" + w;
                         }
                         PreparedStatement statementVest;
                         PreparedStatement statementWeapon;
@@ -109,13 +116,13 @@ public class TimerController implements Initializable {
                         } catch (SQLException e) {
                             throw new RuntimeException(e);
                         }
-                        if (rsVest.next()){
-                            if (rsVest.getInt("vest")==Integer.parseInt(s.substring(0,1))){
-                                handler.updateDeaths(Integer.parseInt(s.substring(0,1)));
+                        if (rsVest.next()) {
+                            if (rsVest.getInt("vest") == Integer.parseInt(s.substring(0, 1))) {
+                                handler.updateDeaths(Integer.parseInt(s.substring(0, 1)));
                             }
                         }
-                        if(rsWeapon.next()){
-                            if (rsWeapon.getInt("weapon")== w){
+                        if (rsWeapon.next()) {
+                            if (rsWeapon.getInt("weapon") == w) {
                                 handler.updateKills(w);
                             }
                         }
@@ -123,6 +130,24 @@ public class TimerController implements Initializable {
                         throw new RuntimeException(e);
                     }
 
+                } else {
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    Parent root;
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("result_table.fxml"));
+                        root = loader.load();
+                        Stage stage = new Stage();
+                        stage.setTitle(Constants.LABEL);
+                        stage.setScene(new Scene(root));
+                        stage.show();
+                        ((Node) (event.getSource())).getScene().getWindow().hide();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 if (seconds < 10) {

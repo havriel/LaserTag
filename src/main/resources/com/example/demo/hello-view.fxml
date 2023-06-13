@@ -3,18 +3,32 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.MainController">
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.MainController">
    <children>
-      <AnchorPane layoutX="-3.0" layoutY="-6.0" prefHeight="164.0" prefWidth="708.0" style="-fx-background-color: #2E3348; -fx-background-image: url('307.jpg'); " AnchorPane.leftAnchor="-3.0" AnchorPane.rightAnchor="-5.0" />
-      <Button fx:id="nextBtn" layoutX="247.0" layoutY="422.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="207.0" style="-fx-border-color: #000000;" text="ДАЛЕЕ" AnchorPane.leftAnchor="247.0" AnchorPane.rightAnchor="246.0" />
-      <Label layoutX="203.0" layoutY="239.0" prefHeight="28.0" prefWidth="115.0" text="Пример: COM5" AnchorPane.leftAnchor="203.0" AnchorPane.rightAnchor="382.0" />
-      <TextField fx:id="comText" layoutX="201.0" layoutY="270.0" prefHeight="40.0" prefWidth="300.0" promptText="Введите COM порт" AnchorPane.leftAnchor="201.0" AnchorPane.rightAnchor="199.0">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </TextField>
+      <VBox prefHeight="148.0" prefWidth="100.0" style="-fx-background-color: #000000;" />
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="1163.0" style="-fx-background-color: #D3D3D3;" VBox.vgrow="ALWAYS">
+         <children>
+            <Pane prefHeight="323.0" prefWidth="1280.0">
+               <children>
+                  <TextField fx:id="comText" layoutX="489.0" layoutY="58.0" prefHeight="68.0" prefWidth="304.0" promptText="Введите com-порт">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </TextField>
+                  <Label layoutX="488.0" layoutY="37.0" text="Пример: COM5" />
+                  <Button fx:id="nextBtn" layoutX="524.0" layoutY="198.0" mnemonicParsing="false" prefHeight="77.0" prefWidth="235.0" style="-fx-background-color: #e07000; -fx-background-radius: 40;" text="ДАЛЕЕ" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Button>
+               </children>
+            </Pane>
+         </children>
+      </VBox>
    </children>
-</AnchorPane>
+</VBox>

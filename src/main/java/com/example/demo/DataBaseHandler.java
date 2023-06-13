@@ -56,13 +56,13 @@ public class DataBaseHandler extends Configs {
         }
     }
 
-    public void updateDeaths(int vest){
+    public void updateDeaths(int vest) {
         try {
             dbConnection = getDbConnection();
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        String uDeath = "UPDATE players SET deaths=deaths+1 WHERE vest="+vest;
+        String uDeath = "UPDATE players SET deaths=deaths+1 WHERE vest=" + vest;
         try {
             Statement statement = dbConnection.createStatement();
             statement.execute(uDeath);
@@ -71,13 +71,13 @@ public class DataBaseHandler extends Configs {
         }
     }
 
-    public void updateKills(int weapon){
+    public void updateKills(int weapon) {
         try {
             dbConnection = getDbConnection();
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        String uKills = "UPDATE players SET kills=kills+1 WHERE weapon="+weapon;
+        String uKills = "UPDATE players SET kills=kills+1 WHERE weapon=" + weapon;
         try {
             Statement statement = dbConnection.createStatement();
             statement.execute(uKills);

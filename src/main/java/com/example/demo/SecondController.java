@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
@@ -45,6 +46,7 @@ public class SecondController {
 
     @FXML
     void initialize() {
+        second_name.setStyle("-fx-prompt-text-fill: black");
         second_weapon.getItems().addAll(Constants.WEAPON);
         second_vest.getItems().addAll(Constants.VEST);
         second_command.getItems().addAll(Constants.COMMANDS);
@@ -95,12 +97,20 @@ public class SecondController {
     }
 
     public void newPlayer(Player player) {
-        player.setName(second_name.getText());
-        player.setCommand(second_command.getValue());
-        player.setWeaponNum(second_weapon.getValue());
-        player.setVestNum(second_vest.getValue());
-        player.setKills(0);
-        player.setDeaths(0);
-        player.setPlace(0);
+        if (second_name.getText().isEmpty() || second_command.getValue().isEmpty() || second_weapon.getValue() == null
+                || second_vest.getValue() == null) {
+            MainController.nullAlert.setAlertType(Alert.AlertType.WARNING);
+            MainController.nullAlert.setTitle(Constants.ERR);
+            MainController.nullAlert.setContentText("Заполните все поля!");
+            MainController.nullAlert.show();
+        } else {
+            player.setName(second_name.getText());
+            player.setCommand(second_command.getValue());
+            player.setWeaponNum(second_weapon.getValue());
+            player.setVestNum(second_vest.getValue());
+            player.setKills(0);
+            player.setDeaths(0);
+            player.setPlace(0);
+        }
     }
 }
