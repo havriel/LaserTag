@@ -63,10 +63,10 @@ public class SecondController {
                     HBox hBox = fxmlLoader.load();
                     PlayerItemController pic = fxmlLoader.getController();
                     pic.setData(players);
-                    if (players.getCommand().equals("Красная")) {
+                    if (players.getCommand().equals("Red")) {
                         redLayout.getChildren().add(hBox);
                     }
-                    if (players.getCommand().equals("Синяя")) {
+                    if (players.getCommand().equals("Blue")) {
                         blueLayout.getChildren().add(hBox);
                     }
                 } catch (IOException e) {
@@ -97,6 +97,16 @@ public class SecondController {
     }
 
     public void newPlayer(Player player) {
+        for(int i=0;i<playerProvider.getList().size();i++){
+            if(playerProvider.getList().get(i).getWeaponNum() == second_weapon.getValue()||
+                    playerProvider.getList().get(i).getVestNum() == second_vest.getValue()){
+                MainController.nullAlert.setAlertType(Alert.AlertType.WARNING);
+                MainController.nullAlert.setTitle(Constants.ERR);
+                MainController.nullAlert.setContentText("Этот номер уже занят!");
+                MainController.nullAlert.show();
+                return;
+            }
+        }
         if (second_name.getText().isEmpty() || second_command.getValue().isEmpty() || second_weapon.getValue() == null
                 || second_vest.getValue() == null) {
             MainController.nullAlert.setAlertType(Alert.AlertType.WARNING);
@@ -105,7 +115,11 @@ public class SecondController {
             MainController.nullAlert.show();
         } else {
             player.setName(second_name.getText());
-            player.setCommand(second_command.getValue());
+            if(second_command.getValue().equals("Красная")){
+                player.setCommand("Red");
+            }else{
+                player.setCommand("Blue");
+            }
             player.setWeaponNum(second_weapon.getValue());
             player.setVestNum(second_vest.getValue());
             player.setKills(0);

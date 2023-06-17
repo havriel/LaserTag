@@ -1,6 +1,9 @@
 package com.example.demo;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class DataBaseHandler extends Configs {
     public Connection dbConnection;
@@ -84,5 +87,67 @@ public class DataBaseHandler extends Configs {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<Player> getRedTable(){
+        List<Player> playersRed = new ArrayList<>();
+        try {
+            dbConnection = getDbConnection();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        String get = "SELECT * FROM players WHERE command='Red'";
+        try {
+            Statement statement = dbConnection.createStatement();
+            ResultSet rs = statement.executeQuery(get);
+            while (rs.next()){
+                Player player = new Player();
+                player.setName(rs.getString("name"));
+                player.setCommand(rs.getString("command"));
+                player.setWeaponNum(rs.getInt("weapon"));
+                player.setVestNum(rs.getInt("vest"));
+                player.setKills(rs.getInt("kills"));
+                player.setDeaths(rs.getInt("deaths"));
+                playersRed.add(player);
+            }
+            playersRed.sort(Comparator.comparingInt(Player::getKills).reversed());
+            for (int i=0;i<playersRed.size();i++){
+                playersRed.get(i).setPlace(i+1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return playersRed;
+    }
+
+    public List<Player> getBlueTable(){
+        List<Player> playersBlue = new ArrayList<>();
+        try {
+            dbConnection = getDbConnection();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        String get = "SELECT * FROM players WHERE command='Blue'";
+        try {
+            Statement statement = dbConnection.createStatement();
+            ResultSet rs = statement.executeQuery(get);
+            while (rs.next()){
+                Player player = new Player();
+                player.setName(rs.getString("name"));
+                player.setCommand(rs.getString("command"));
+                player.setWeaponNum(rs.getInt("weapon"));
+                player.setVestNum(rs.getInt("vest"));
+                player.setKills(rs.getInt("kills"));
+                player.setDeaths(rs.getInt("deaths"));
+                playersBlue.add(player);
+            }
+            playersBlue.sort(Comparator.comparingInt(Player::getKills).reversed());
+            for (int i=0;i<playersBlue.size();i++){
+                playersBlue.get(i).setPlace(i+1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return playersBlue;
     }
 }

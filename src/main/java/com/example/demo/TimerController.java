@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -25,10 +26,11 @@ import java.util.ResourceBundle;
 
 public class TimerController implements Initializable {
     private Timeline timeline;
-    private int seconds = 10;
-    private int minutes = 1;
+    private int seconds = 0;
+    private int minutes = 0;
     private boolean isStopped = false;
     private DataBaseHandler handler;
+    private SerialPort serialPort;
 
     @FXML
     private Label minute;
@@ -39,32 +41,52 @@ public class TimerController implements Initializable {
     @FXML
     private Button startTimer;
 
+    @FXML
+    private Button stopTimer;
+
+    @FXML
+    private ChoiceBox<Integer> time;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         handler = new DataBaseHandler();
-        try {
-            handler.dbConnection = handler.getDbConnection();
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-
+        time.getItems().addAll(Constants.TIMES);
         FileInput input = new FileInput();
-        SerialPort serialPort = new SerialPort(input.readFile());
-        try {
-            serialPort.openPort();
-            serialPort.setParams(SerialPort.BAUDRATE_9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
-        } catch (SerialPortException e) {
-            throw new RuntimeException(e);
+        serialPort = new SerialPort(input.readFile());
+        if(seconds<10){
+            second.setText("0"+seconds);
+        }else {
+            second.setText(Integer.toString(seconds));
         }
         if (minutes < 10) {
             minute.setText("0" + minutes);
         } else {
             minute.setText(Integer.toString(minutes));
         }
-        second.setText(Integer.toString(seconds));
 
         startTimer.setOnAction(event -> {
+            if(time.getValue() == null){
+                return;
+            }else {
+                startTimer.setDisable(true);
+            }
+            time.setDisable(true);
+
+
+            try {
+                serialPort.openPort();
+                serialPort.setParams(SerialPort.BAUDRATE_9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
+            } catch (SerialPortException e) {
+                throw new RuntimeException(e);
+            }
+
+
+            try {
+                handler.dbConnection = handler.getDbConnection();
+            } catch (SQLException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            minutes = time.getValue();
             if (timeline != null) {
                 timeline.stop();
             }
@@ -74,7 +96,7 @@ public class TimerController implements Initializable {
             timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), event1 -> {
                 seconds--;
                 if (seconds <= 0) {
-                    seconds = 60;
+                    seconds = 59;
                     minutes--;
                     if (minutes < 0) {
                         minutes = 0;
@@ -92,8 +114,9 @@ public class TimerController implements Initializable {
                         String getWeapon;
 
                         int w = Integer.parseInt(s.substring(s.lastIndexOf('/') + 1));
+                        int v = Integer.parseInt(s.substring(0, s.indexOf('/')));
 
-                        if (s.startsWith("10")) {
+                        if ( v == 10) {
                             getVest = "SELECT vest FROM players WHERE vest =" + 10;
                         } else {
                             getVest = "SELECT vest FROM players WHERE vest =" + Integer.parseInt(s.substring(0, 1));
@@ -119,6 +142,8 @@ public class TimerController implements Initializable {
                         if (rsVest.next()) {
                             if (rsVest.getInt("vest") == Integer.parseInt(s.substring(0, 1))) {
                                 handler.updateDeaths(Integer.parseInt(s.substring(0, 1)));
+                            }else{
+                                handler.updateDeaths(v);
                             }
                         }
                         if (rsWeapon.next()) {
@@ -162,6 +187,30 @@ public class TimerController implements Initializable {
                 }
             }));
             timeline.playFromStart();
+        });
+        stop();
+    }
+    private void stop(){
+        stopTimer.setOnAction(event -> {
+            timeline.stop();
+            try {
+                serialPort.closePort();
+            } catch (SerialPortException e) {
+                throw new RuntimeException(e);
+            }
+            stopTimer.setStyle("-fx-background-color: #00FF7F;-fx-background-radius: 50;");
+            stopTimer.setText("ПРОДОЛЖИТЬ");
+            stopTimer.setOnAction(event1 -> {
+                stopTimer.setStyle("-fx-background-color:  #DC143C;-fx-background-radius: 50;");
+                stopTimer.setText("СТОП");
+                try {
+                    serialPort.openPort();
+                } catch (SerialPortException e) {
+                    throw new RuntimeException(e);
+                }
+                timeline.play();
+                stop();
+            });
         });
     }
 }
